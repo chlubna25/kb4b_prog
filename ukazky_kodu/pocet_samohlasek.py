@@ -10,4 +10,4 @@ def pocet_samohlasek(slovo):
   return pocet
 
 
-print( pocet_samohlasek("Anna"))
+print(pocet_samohlasek("Anna"))

@@ -1,0 +1,30 @@
+print("Limit schodu: 5")
+schod = int(input("Zadej pocet schodu: "))
+
+if schod == 1:
+    print("h")
+
+elif schod == 2:
+    print("h")
+    print("hh")
+
+elif schod == 3:
+    print("h")
+    print("hh")
+    print("hhh")
+
+elif schod == 4:
+    print("h")
+    print("hh")
+    print("hhh")
+    print("hhhh")
+
+elif schod == 5:
+    print("h")
+    print("hh")
+    print("hhh")
+    print("hhhh")
+    print("hhhhh")
+
+else:
+    print("nemuzes takovy pocet schodu. jebus ti strci prst do zadecku.")

@@ -45,7 +45,6 @@ def place_bet(balance):
         return None, None, 0
 
 def evaluate_bet(bet, bet_type, bet_amount, number, color):
-    """Vyhodnotí sázku, vrátí výsledek a aktualizovanou částku."""
     if bet is None:
         return "Sázka zrušena.", 0
     

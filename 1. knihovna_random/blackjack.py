@@ -24,7 +24,7 @@ def blackjack(def_balance):
         print("------")
         
         sazka = int(input("Zadejte sázku: "))
-        if sazka <= balance:
+        if sazka <= balance and sazka > 0:
             karty_hrac = []
             karty_dealer = []
             for _ in range(2):
@@ -66,6 +66,11 @@ def blackjack(def_balance):
                               f"(Hodnota: {calculate_score(karty_hrac)})")
                         print(f"Karty dealera: {karty_dealer[0]}, *")
                         print("------")
+                        if calculate_score(karty_hrac) > 21:
+                            print("Prohral jsi: Překročil jsi 21!")
+                            balance -= sazka
+                            time.sleep(3)
+                            break
                         continue
                     clear_terminal()
                     sazka, karty_hrac = double_down(sazka, karty_hrac)

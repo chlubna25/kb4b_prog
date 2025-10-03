@@ -14,12 +14,12 @@ def rachot():
     strany = volby(1)
     preference = volby(2)
     preference_new = preference.copy()
-    for i in range(preference):
-        nahoda = round(random.uniform(0.01, 0.03), 5)
-        debilni_strana = random.choice(strany)
-        pozice_deb_strany = strany.index(debilni_strana)
-        preference_new[pozice_deb_strany] -= nahoda
-        preference_new[i] = nahoda
+    for i in range(len(preference)):
+        nahoda = round(random.uniform(-0.5, 0.5), 2)
+        preference_new[i] = max(0, preference_new[i] + nahoda)
+    total = sum(preference_new)
+    original_total = sum(preference)
+    preference_new = [p * original_total / total for p in preference_new]
     return preference_new
 
 def ucast():
@@ -42,14 +42,14 @@ def hlasovani():
         'Stačilo': 0,
         'Jiné': 0
     }
-    for ucastnik in ucastnici:
-        hlas = random.choice(strany, preference_new, k=0)[1]
+    for _ in range(int(ucastnici)):
+        hlas = random.choices(strany, weights=preference_new, k=1)[0]
         hlasovani_strany[hlas] += 1
-        return hlasovani_strany
+    return hlasovani_strany
 def spocitani():
     hlasovani_strany = hlasovani()
-    max = max(hlasovani_strany.values())
-    procenta = {key: (value/max)*100 for key, value in hlasovani_strany.items()}
+    total_hlasu = sum(hlasovani_strany.values())
+    procenta = {key: (value/total_hlasu)*100 for key, value in hlasovani_strany.items()}
     #for cycle by ai
     for strana, pocet_hlasu in hlasovani_strany.items():
         procento = procenta[strana]

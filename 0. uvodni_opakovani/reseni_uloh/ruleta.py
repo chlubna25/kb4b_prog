@@ -43,7 +43,7 @@ def ruleta():
             vklad -= sazka
 
         if vklad < 10:
-            print("\nmas min jak minimalni sazku. hra konci.")
+            print("\nmas min jak minimalni sazku. hra konci.")                                      
             break
 
         pokracovat = input("\nChces hrat dal? (ano/ne): ").lower()

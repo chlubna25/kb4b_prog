@@ -2,7 +2,7 @@
 
 Zadání řešte pomocí tvorby funkcí.
 
-Nebojte se googlovat a hledat programátorské rady :)
+Nebojte se googlovat a hledat programátorské rady :
 
 ### Vypsání dělitelů
 Vytvoř funkci, která na vstupu bere číslo. Následně vypíše všechny dělitele tohoto čísla.
@@ -21,18 +21,18 @@ Vytvoř funkci, která na vstupu bere číslo. Následně vypíše všechny děl
 
  Např.
  - vstup: 5 "h"
- - výstup:
-    h
-    hh
-    hhh
-    hhhh
+ - výstup:<br>
+    h<br>
+    hh<br>
+    hhh<br>
+    hhhh<br>
     hhhhh
 
 ### Validátor rodného čísla:
 Uživatel zadá řetězec. Zjisti, zda se jedná o validní rodné číslo.
 - pokud ANO - vypiš datum narození uživatele a jeho pohlaví
 - pokud NE - ukonči program
-![tahak k datu narození](helpers/datum-narozeni-1404272651.jpg)
+!tahak k datu naroze(helpers/datum-narozeni-1404272651.jpg)
  Např.
  - vstup: 850126/1158
  - výstup:

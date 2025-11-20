@@ -4,8 +4,6 @@ max_value = int(input("Zadej maximální hodnotu: "))
 count = int(input("Kolik čísel chceš vygenerovat: "))
 
 
-
-
 random_numbers = [random.randint(min_value, max_value) for _ in range(count)]
 
 with open("random_numbers.txt", "w") as file:

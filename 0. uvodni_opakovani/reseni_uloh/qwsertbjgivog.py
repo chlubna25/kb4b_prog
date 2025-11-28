@@ -1,0 +1,1 @@
+print("hery ma placate koule")

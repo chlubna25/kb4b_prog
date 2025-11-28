@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruleta</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+        <h1 class="text-2xl font-bold text-center mb-4">Ruleta</h1>
+        <div id="game-area">
+            <p id="balance" class="text-lg mb-4">Zůstatek: 1000 Kč</p>
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-1">Typ sázky:</label>
+                <select id="bet-type" class="w-full p-2 border rounded">
+                    <option value="number">Číslo (0-36)</option>
+                    <option value="color">Barva (červená/černá)</option>
+                </select>
+            </div>
+            <div id="number-input" class="mb-4">
+                <label class="block text-sm font-medium mb-1">Vsadit na číslo (0-36):</label>
+                <input type="number" id="bet-number" min="0" max="36" class="w-full p-2 border rounded" placeholder="Zadejte číslo">
+            </div>
+            <div id="color-input" class="mb-4 hidden">
+                <label class="block text-sm font-medium mb-1">Vsadit na barvu:</label>
+                <select id="bet-color" class="w-full p-2 border rounded">
+                    <option value="červená">Červená</option>
+                    <option value="černá">Černá</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-1">Částka sázky (Kč):</label>
+                <input type="number" id="bet-amount" min="1" class="w-full p-2 border rounded" placeholder="Zadejte částku">
+            </div>
+            <button id="place-bet" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Vsadit</button>
+            <p id="result" class="mt-4 text-center"></p>
+            <div id="play-again" class="mt-4 hidden">
+                <button id="play-again-btn" class="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600">Hrát znovu</button>
+            </div>
+        </div>
+        <div id="game-over" class="hidden">
+            <p id="final-balance" class="text-lg mb-4 text-center"></p>
+            <button id="restart" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Začít znovu</button>
+        </div>
+    </div>
+
+    <script>
+        let balance = 1000;
+        let gameActive = true;
+
+        function spinRoulette() {
+            const number = Math.floor(Math.random() * 37);
+            let color;
+            if (number === 0) {
+                color = "zelená";
+            } else if ([1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36].includes(number)) {
+                color = "červená";
+            } else {
+                color = "černá";
+            }
+            return { number, color };
+        }
+
+        function placeBet() {
+            const betType = document.getElementById('bet-type').value;
+            const betAmount = parseInt(document.getElementById('bet-amount').value);
+            let bet;
+
+            if (isNaN(betAmount) || betAmount <= 0 || betAmount > balance) {
+                document.getElementById('result').textContent = "Neplatná částka sázky nebo nedostatečný zůstatek!";
+                return null;
+            }
+
+            if (betType === "number") {
+                bet = parseInt(document.getElementById('bet-number').value);
+                if (isNaN(bet) || bet < 0 || bet > 36) {
+                    document.getElementById('result').textContent = "Neplatné číslo!";
+                    return null;
+                }
+            } else {
+                bet = document.getElementById('bet-color').value;
+            }
+
+            return { bet, betType, betAmount };
+        }
+
+        function evaluateBet(bet, betType, betAmount, number, color) {
+            if (!bet) return { result: "Sázka zrušena.", winnings: 0 };
+
+            if (betType === "number") {
+                if (bet === number) {
+                    const win = betAmount * 35;
+                    return { result: `Vyhráli jste! Padlo číslo ${number}. Výhra: ${win} Kč.`, winnings: win };
+                } else {
+                    return { result: `Prohráli jste. Padlo číslo ${number}.`, winnings: -betAmount };
+                }
+            } else {
+                if (bet === color) {
+                    const win = betAmount;
+                    return { result: `Vyhráli jste! Padla barva ${color}. Výhra: ${win} Kč.`, winnings: win };
+                } else {
+                    return { result: `Prohráli jste. Padla barva ${color}.`, winnings: -betAmount };
+                }
+            }
+        }
+
+        function updateUI() {
+            document.getElementById('balance').textContent = `Zůstatek: ${balance} Kč`;
+            if (balance <= 0) {
+                gameActive = false;
+                document.getElementById('game-area').classList.add('hidden');
+                document.getElementById('game-over').classList.remove('hidden');
+                document.getElementById('final-balance').textContent = `Konečný zůstatek: ${balance} Kč. Konec hry!`;
+            }
+        }
+
+        document.getElementById('bet-type').addEventListener('change', function() {
+            const numberInput = document.getElementById('number-input');
+            const colorInput = document.getElementById('color-input');
+            if (this.value === "number") {
+                numberInput.classList.remove('hidden');
+                colorInput.classList.add('hidden');
+            } else {
+                numberInput.classList.add('hidden');
+                colorInput.classList.remove('hidden');
+            }
+        });
+
+        document.getElementById('place-bet').addEventListener('click', function() {
+            if (!gameActive) return;
+
+            const betData = placeBet();
+            if (!betData) return;
+
+            const { bet, betType, betAmount } = betData;
+            const { number, color } = spinRoulette();
+            const { result, winnings } = evaluateBet(bet, betType, betAmount, number, color);
+
+            balance += winnings;
+            document.getElementById('result').textContent = `Výsledek: Číslo ${number}, Barva: ${color}. ${result}`;
+            document.getElementById('play-again').classList.remove('hidden');
+            document.getElementById('place-bet').classList.add('hidden');
+            updateUI();
+        });
+
+        document.getElementById('play-again-btn').addEventListener('click', function() {
+            document.getElementById('result').textContent = "";
+            document.getElementById('play-again').classList.add('hidden');
+            document.getElementById('place-bet').classList.remove('hidden');
+            document.getElementById('bet-amount').value = "";
+            document.getElementById('bet-number').value = "";
+        });
+
+        document.getElementById('restart').addEventListener('click', function() {
+            balance = 1000;
+            gameActive = true;
+            document.getElementById('game-area').classList.remove('hidden');
+            document.getElementById('game-over').classList.add('hidden');
+            document.getElementById('result').textContent = "";
+            document.getElementById('play-again').classList.add('hidden');
+            document.getElementById('place-bet').classList.remove('hidden');
+            document.getElementById('bet-amount').value = "";
+            document.getElementById('bet-number').value = "";
+            updateUI();
+        });
+
+        updateUI();
+    </script>
+</body>
+</html>

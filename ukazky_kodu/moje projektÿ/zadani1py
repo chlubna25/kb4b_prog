@@ -1,0 +1,5 @@
+print("Limit schodu: 5")
+schod = int(input("Zadej pocet schodu: "))
+
+while schod == 1:
+    print("skibidi toilet")

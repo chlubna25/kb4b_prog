@@ -22,8 +22,26 @@ if epstein == "P":
                     data = pd.read_csv(r"2. prace_se_soubory\PROJEKT_milionar\quiz_questions.csv")
                     nahodna_otazka = data.sample(1)
 
-                    print(nahodna_otazka["question"].values[0])
-                                    
+                    # otázka
+                    question = nahodna_otazka["question"].values[0]
+                    correct = nahodna_otazka["correct_answer"].values[0]
+
+                    print(question)
+                    print("Odpověz True / False")
+
+                    # vstup od uživatele
+                    user_answer = input("Tvoje odpověď: ")
+
+                    # sjednocení formátu
+                    user_answer = user_answer.capitalize()
+
+                    # vyhodnocení
+                    if user_answer == correct:
+                        print("✅ Správně!")
+                    else:
+                        print("❌ Špatně!")
+                        print(f"Správná odpověď je: {correct}")
+                                                    
 
                  
 

@@ -1,5 +1,17 @@
-hra():
+import random
+import matplotlib.pyplot as plt
+import pandas as pd
 
+def hra():
+    data = pd.read_csv(r"2. prace_se_soubory/PROJEKT_milionar/quiz_questions.csv")
+    nahodna_otazka = data.sample(1)
+
+    print(nahodna_otazka["question"].values[0])
+        
+
+
+def graf():
+    pass
 
 print("vitej cernochu v onoline nejlepism kasinu kde se stanes milionarem.")
 print("vzber, jestli se chces prihlasit (P) a nebo vytvorit (V) ucet:")
@@ -18,10 +30,12 @@ if epstein == "P":
                     hra()
 
                 elif vyber == "G":
-                    pass
+                    graf()
 
                 else:
                     print("Asi vazne neumis psat nebo nevim cichna te spapa a nebuides stastnz.")
+            else:
+                print("spatne jmeno nebo heslo, zkus to znovu nebo si vytvor ucet.")
                     
     
 

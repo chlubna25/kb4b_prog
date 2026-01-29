@@ -7,16 +7,33 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 from sklearn.metrics import ConfusionMatrixDisplay
+cesta = r"C:\Users\st025498\Downloads\kb4b_jebus\3. strojove_uceni\data\high_elo_opening.csv"
 
-# ---------- Načtení CSV a úprava dat ----------
-X = []  # = vstupy
-Y = []  # = výstupy
 
+# Funkce pro extrakci prefixu (první písmeno kódu)
+def extract_prefix(code):
+    return code[0]  # Vrátí první znak kódu (např. "E" z "ECO")
+
+# Funkce pro unikátní kódování celého kódu
+def unique_code_encoding(code, code_to_int):
+    if code not in code_to_int:
+        code_to_int[code] = len(code_to_int)  # Přiřadí unikátní číslo k novému kódu
+    return code_to_int[code]
+
+# Inicializace seznamů pro X a Y
+X = []
+Y = []
+
+# Inicializace slovníku pro přiřazení unikátních čísel k celým kódům
+code_to_int = {}
+
+# Načítání dat z CSV souboru
 with open("data/bmi.csv", "r", encoding="utf-8") as file:
     reader = csv.DictReader(file)
     for row in reader:
         height = float(row["Height"])
         weight = float(row["Weight"])
+
         # Na vstupu mohou být jen číselné vstupy:
         if row["Gender"] == "Male":
             gender = 0
@@ -25,8 +42,17 @@ with open("data/bmi.csv", "r", encoding="utf-8") as file:
 
         bmi_category = int(row["Index"])
 
+        # Extrahujeme prefix a unikátní kód pro každý kód (např. "ECO", "B03")
+        code = row["ECO"]  # Předpokládáme, že kódy jsou v sloupci "Code"
+        prefix = extract_prefix(code)
+        prefix_encoding = unique_code_encoding(prefix, code_to_int)
+        unique_code_encoding_val = unique_code_encoding(code, code_to_int)
+
+        # Přidáme vstupy X a výstupy Y
         X.append([gender, height, weight])
-        Y.append(bmi_category)
+        Y.append([prefix_encoding, unique_code_encoding_val])  # Přidáme dvě hodnoty
+
+
 
 
 # ---------- Rozdělení na trénování a testování ----------
